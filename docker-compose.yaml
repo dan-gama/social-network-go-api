@@ -1,0 +1,17 @@
+version: '3.3'
+
+services:
+  db:
+    container_name: 'sn-mySQL'
+    image: mysql:latest
+    restart: always
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_DATABASE: 'db'
+      MYSQL_ROOT_PASSWORD: '1qa2ws3ed'
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:

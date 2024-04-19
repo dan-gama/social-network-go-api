@@ -1,0 +1,4 @@
+CREATE USER 'sn_api'@localhost IDENTIFIED BY '7b9f0a8b37833a154c44e9751b3cd8b7d3738e98';
+GRANT ALL PRIVILEGES ON SocialNetwork TO 'sn_api'@localhost;
+
+FLUSH PRIVILEGES;

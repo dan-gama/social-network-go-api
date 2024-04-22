@@ -3,31 +3,48 @@ package controllers
 import (
 	"encoding/json"
 	"io"
-	"log"
 	"net/http"
 	"sn-api/src/data"
 	"sn-api/src/models"
+	"sn-api/src/repositories"
+	"sn-api/src/responses"
 )
 
 // Create cria um novo usuário
-func Create(write http.ResponseWriter, req *http.Request) {
+func Create(writer http.ResponseWriter, req *http.Request) {
 	// write.Write([]byte("Creating user..."))
 	body, err := io.ReadAll(req.Body)
 	if err != nil {
-		log.Fatal(err)
+		responses.Error(writer, http.StatusUnprocessableEntity, err)
+		return
 	}
 
 	var user models.User
 	if err = json.Unmarshal(body, &user); err != nil {
-		log.Fatal(err)
+		responses.Error(writer, http.StatusBadRequest, err)
+		return
+	}
+
+	if err := user.Validate(); err != nil {
+		responses.Error(writer, http.StatusBadRequest, err)
+		return
 	}
 
 	db, err := data.ConnectDB()
 	if err != nil {
-		log.Fatal(err)
+		responses.Error(writer, http.StatusInternalServerError, err)
+		return
+	}
+	defer db.Close()
+
+	repository := repositories.NewUserRepository(db)
+	user.Id, err = repository.Create(user)
+	if err != nil {
+		responses.Error(writer, http.StatusInternalServerError, err)
+		return
 	}
 
-	db.Close()
+	responses.JSON(writer, http.StatusCreated, user)
 }
 
 // GetAll busca todos os usuários

@@ -1,10 +1,33 @@
 package controllers
 
-import "net/http"
+import (
+	"encoding/json"
+	"io"
+	"log"
+	"net/http"
+	"sn-api/src/data"
+	"sn-api/src/models"
+)
 
 // Create cria um novo usuário
 func Create(write http.ResponseWriter, req *http.Request) {
-	write.Write([]byte("Creating user..."))
+	// write.Write([]byte("Creating user..."))
+	body, err := io.ReadAll(req.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var user models.User
+	if err = json.Unmarshal(body, &user); err != nil {
+		log.Fatal(err)
+	}
+
+	db, err := data.ConnectDB()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	db.Close()
 }
 
 // GetAll busca todos os usuários

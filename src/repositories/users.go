@@ -16,7 +16,7 @@ func NewUserRepository(db *sql.DB) *user {
 }
 
 // Create cria um usuário no banco de dados
-func (repo user) Create(user models.User) (uint64, error) {
+func (repo user) UserCreate(user models.User) (uint64, error) {
 	statement, err := repo.db.Prepare(`
 		insert into User (
 			email,
@@ -43,7 +43,7 @@ func (repo user) Create(user models.User) (uint64, error) {
 }
 
 // GetUsersByName busca todos os usuários
-func (repo user) GetAll() ([]models.User, error) {
+func (repo user) UserGetAll() ([]models.User, error) {
 	rows, err := repo.db.Query(`
 		select
 			id,
@@ -78,7 +78,7 @@ func (repo user) GetAll() ([]models.User, error) {
 }
 
 // GetUsersByName busca os usuários pelo nome
-func (repo user) GetByName(name string) ([]models.User, error) {
+func (repo user) UserGetByName(name string) ([]models.User, error) {
 	rows, err := repo.db.Query(`
 		select
 			id,
@@ -115,7 +115,7 @@ func (repo user) GetByName(name string) ([]models.User, error) {
 }
 
 // Get retorna um usuário, de acordo com o id
-func (repo user) Get(id uint64) (models.User, error) {
+func (repo user) UserGet(id uint64) (models.User, error) {
 	rows, err := repo.db.Query(`
 		select
 			id,
@@ -149,7 +149,7 @@ func (repo user) Get(id uint64) (models.User, error) {
 }
 
 // Update Atualiza o usuário no banco de dados
-func (repo user) Update(id uint64, model models.User) error {
+func (repo user) UserUpdate(id uint64, model models.User) error {
 	statement, err := repo.db.Prepare(`
 		update User set
 			email = ?,
@@ -170,7 +170,7 @@ func (repo user) Update(id uint64, model models.User) error {
 }
 
 // Delete Exclui o usuário do banco de dados
-func (repo user) Delete(id uint64) error {
+func (repo user) UserDelete(id uint64) error {
 	statement, err := repo.db.Prepare(`
 		delete from User
 		where

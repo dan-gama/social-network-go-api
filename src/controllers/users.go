@@ -20,7 +20,7 @@ type ModelValidate interface {
 }
 
 // Create cria um novo usuário
-func Create(writer http.ResponseWriter, req *http.Request) {
+func UserCreate(writer http.ResponseWriter, req *http.Request) {
 	// write.Write([]byte("Creating user..."))
 	body, err := io.ReadAll(req.Body)
 	if err != nil {
@@ -47,7 +47,7 @@ func Create(writer http.ResponseWriter, req *http.Request) {
 	defer db.Close()
 
 	repository := repositories.NewUserRepository(db)
-	user.Id, err = repository.Create(user)
+	user.Id, err = repository.UserCreate(user)
 	if err != nil {
 		responses.Error(writer, http.StatusInternalServerError, err)
 		return
@@ -57,7 +57,7 @@ func Create(writer http.ResponseWriter, req *http.Request) {
 }
 
 // GetAll busca todos os usuários
-func GetAll(writer http.ResponseWriter, req *http.Request) {
+func UserGetAll(writer http.ResponseWriter, req *http.Request) {
 	db, err := data.ConnectDB()
 	if err != nil {
 		responses.Error(writer, http.StatusInternalServerError, err)
@@ -66,7 +66,7 @@ func GetAll(writer http.ResponseWriter, req *http.Request) {
 
 	repository := repositories.NewUserRepository(db)
 
-	users, err := repository.GetAll()
+	users, err := repository.UserGetAll()
 	if err != nil {
 		responses.Error(writer, http.StatusInternalServerError, err)
 	}
@@ -76,7 +76,7 @@ func GetAll(writer http.ResponseWriter, req *http.Request) {
 }
 
 // GetAll busca todos os usuários pelo nome
-func GetByName(writer http.ResponseWriter, req *http.Request) {
+func UserGetByName(writer http.ResponseWriter, req *http.Request) {
 	name := strings.ToLower(req.URL.Query().Get("name"))
 
 	db, err := data.ConnectDB()
@@ -87,7 +87,7 @@ func GetByName(writer http.ResponseWriter, req *http.Request) {
 
 	repository := repositories.NewUserRepository(db)
 
-	users, err := repository.GetByName(name)
+	users, err := repository.UserGetByName(name)
 	if err != nil {
 		responses.Error(writer, http.StatusInternalServerError, err)
 	}
@@ -97,7 +97,7 @@ func GetByName(writer http.ResponseWriter, req *http.Request) {
 }
 
 // Get busca um determinado usuário
-func Get(writer http.ResponseWriter, req *http.Request) {
+func UserGet(writer http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
 
 	id, err := strconv.ParseUint(params["id"], 10, 64)
@@ -114,7 +114,7 @@ func Get(writer http.ResponseWriter, req *http.Request) {
 
 	repository := repositories.NewUserRepository(db)
 
-	user, err := repository.Get(id)
+	user, err := repository.UserGet(id)
 	if err != nil {
 		responses.Error(writer, http.StatusInternalServerError, err)
 		return
@@ -129,7 +129,7 @@ func Get(writer http.ResponseWriter, req *http.Request) {
 }
 
 // Update atualiza um usuário
-func Update(writer http.ResponseWriter, req *http.Request) {
+func UserUpdate(writer http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
 	id, err := strconv.ParseUint(params["id"], 10, 64)
 	if err != nil {
@@ -161,7 +161,7 @@ func Update(writer http.ResponseWriter, req *http.Request) {
 	defer db.Close()
 
 	repository := repositories.NewUserRepository(db)
-	err = repository.Update(id, user)
+	err = repository.UserUpdate(id, user)
 	if err != nil {
 		responses.Error(writer, http.StatusInternalServerError, err)
 		return
@@ -173,7 +173,7 @@ func Update(writer http.ResponseWriter, req *http.Request) {
 }
 
 // Delete remove um usuário
-func Delete(writer http.ResponseWriter, req *http.Request) {
+func UserDelete(writer http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
 	id, err := strconv.ParseUint(params["id"], 10, 64)
 	if err != nil {
@@ -189,7 +189,7 @@ func Delete(writer http.ResponseWriter, req *http.Request) {
 	defer db.Close()
 
 	repository := repositories.NewUserRepository(db)
-	err = repository.Delete(id)
+	err = repository.UserDelete(id)
 	if err != nil {
 		responses.Error(writer, http.StatusInternalServerError, err)
 		return

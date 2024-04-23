@@ -9,37 +9,37 @@ var userRoutes = []Route{
 	{
 		URI:           "/users",
 		Method:        http.MethodPost,
-		Function:      controllers.Create,
+		Function:      controllers.UserCreate,
 		Authenticated: false,
 	},
 	{
 		URI:           "/users",
 		Method:        http.MethodGet,
-		Function:      controllers.GetAll,
+		Function:      controllers.UserGetAll,
 		Authenticated: false,
 	},
 	{
 		URI:           "/users/{id}",
 		Method:        http.MethodGet,
-		Function:      controllers.Get,
+		Function:      controllers.UserGet,
 		Authenticated: false,
 	},
 	{
 		URI:           "/users/{id}",
 		Method:        http.MethodPut,
-		Function:      controllers.Update,
+		Function:      controllers.UserUpdate,
 		Authenticated: false,
 	},
 	{
 		URI:           "/users/{id}",
 		Method:        http.MethodDelete,
-		Function:      controllers.Delete,
+		Function:      controllers.UserDelete,
 		Authenticated: false,
 	},
 	{
 		URI:           "/users-by-name/{name}",
 		Method:        http.MethodGet,
-		Function:      controllers.GetByName,
+		Function:      controllers.UserGetByName,
 		Authenticated: false,
 	},
 }

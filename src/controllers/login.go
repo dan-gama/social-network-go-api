@@ -5,6 +5,7 @@ import (
 	"errors"
 	"io"
 	"net/http"
+	"sn-api/src/auth"
 	"sn-api/src/data"
 	"sn-api/src/models"
 	"sn-api/src/repositories"
@@ -33,16 +34,24 @@ func LoginAuth(writer http.ResponseWriter, req *http.Request) {
 	defer db.Close()
 
 	repository := repositories.NewLoginRepository(db)
-	auth, err := repository.CheckAuth(user.Email)
+	userCheck, err := repository.CheckAuth(user.Email)
 	if err != nil {
 		responses.Error(writer, http.StatusInternalServerError, err)
 		return
 	}
 
-	if err = security.CheckPassword(auth.Password, user.Password); err != nil {
+	if err = security.CheckPassword(userCheck.Password, user.Password); err != nil {
 		responses.Error(writer, http.StatusUnauthorized, errors.New("a senhha informada está incorreta"))
 		return
 	}
 
-	responses.JSON(writer, http.StatusOK, auth)
+	token, err := auth.CreateToken(userCheck.Id)
+	if err != nil {
+		responses.Error(writer, http.StatusInternalServerError, errors.New("fallha ao gerar token"))
+		return
+	}
+
+	writer.Write([]byte(token))
+
+	// responses.JSON(writer, http.StatusOK, auth)
 }

@@ -29,7 +29,7 @@ func Init() {
 
 	ApiPort = os.Getenv("API_PORT")
 	ApiHost = os.Getenv("API_HOST")
-	ConnectionString = fmt.Sprintf("%s:%s@tcp(%s)/%s",
+	ConnectionString = fmt.Sprintf("%s:%s@tcp(%s)/%s?parseTime=true",
 		os.Getenv("MYSQL_USER"),
 		os.Getenv("MYSQL_PASSWORD"),
 		os.Getenv("MYSQL_HOST"),

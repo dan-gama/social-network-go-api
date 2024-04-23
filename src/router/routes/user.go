@@ -36,4 +36,10 @@ var userRoutes = []Route{
 		Function:      controllers.Delete,
 		Authenticated: false,
 	},
+	{
+		URI:           "/users-by-name/{name}",
+		Method:        http.MethodGet,
+		Function:      controllers.GetByName,
+		Authenticated: false,
+	},
 }

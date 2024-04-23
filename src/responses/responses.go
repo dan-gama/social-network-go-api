@@ -6,11 +6,19 @@ import (
 	"net/http"
 )
 
+type ResponseError struct {
+	StatusCode int
+	Error      error
+}
+
 func JSON(writer http.ResponseWriter, statusCode int, data interface{}) {
+	writer.Header().Set("Content-Type", "application/json")
 	writer.WriteHeader(statusCode)
 
-	if err := json.NewEncoder(writer).Encode(data); err != nil {
-		log.Fatal(err)
+	if data != nil {
+		if err := json.NewEncoder(writer).Encode(data); err != nil {
+			log.Fatal(err)
+		}
 	}
 }
 

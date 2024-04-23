@@ -18,8 +18,8 @@ var (
 	// ApiHost endereço da aplicação
 	ApiHost = ""
 
-	// Assinatura do token
-	TokenSecret = ""
+	// TokenSecret chave utilizada para assinatura do token
+	TokenSecret []byte
 )
 
 // Init função que inicializa o config
@@ -32,7 +32,7 @@ func Init() {
 
 	ApiPort = os.Getenv("API_PORT")
 	ApiHost = os.Getenv("API_HOST")
-	TokenSecret = os.Getenv("TOKEN_SECRET")
+	TokenSecret = []byte(os.Getenv("TOKEN_SECRET"))
 
 	ConnectionString = fmt.Sprintf("%s:%s@tcp(%s)/%s?parseTime=true",
 		os.Getenv("MYSQL_USER"),

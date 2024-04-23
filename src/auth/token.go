@@ -15,5 +15,5 @@ func CreateToken(userId uint64) (string, error) {
 	permissions["userId"] = userId
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, permissions)
-	return token.SignedString([]byte(config.TokenSecret))
+	return token.SignedString(config.TokenSecret)
 }

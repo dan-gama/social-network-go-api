@@ -5,6 +5,7 @@ import (
 	"errors"
 	"io"
 	"net/http"
+	"sn-api/src/auth"
 	"sn-api/src/data"
 	"sn-api/src/models"
 	"sn-api/src/repositories"
@@ -137,6 +138,17 @@ func UserUpdate(writer http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	tokenUserId, err := auth.GetUserId(req)
+	if err != nil {
+		responses.Error(writer, http.StatusUnauthorized, err)
+		return
+	}
+
+	if tokenUserId != id {
+		responses.Error(writer, http.StatusForbidden, errors.New("você não tem permissão para realizar esta ação"))
+		return
+	}
+
 	body, err := io.ReadAll(req.Body)
 	if err != nil {
 		responses.Error(writer, http.StatusBadRequest, err)
@@ -148,7 +160,7 @@ func UserUpdate(writer http.ResponseWriter, req *http.Request) {
 		responses.Error(writer, http.StatusBadRequest, err)
 	}
 
-	if err := user.Validate(models.ActionCreate); err != nil {
+	if err := user.Validate(models.ActionUpdate); err != nil {
 		responses.Error(writer, http.StatusBadRequest, err)
 		return
 	}
@@ -178,6 +190,17 @@ func UserDelete(writer http.ResponseWriter, req *http.Request) {
 	id, err := strconv.ParseUint(params["id"], 10, 64)
 	if err != nil {
 		responses.Error(writer, http.StatusBadRequest, err)
+		return
+	}
+
+	tokenUserId, err := auth.GetUserId(req)
+	if err != nil {
+		responses.Error(writer, http.StatusUnauthorized, err)
+		return
+	}
+
+	if tokenUserId != id {
+		responses.Error(writer, http.StatusForbidden, errors.New("você não tem permissão para realizar esta ação"))
 		return
 	}
 
